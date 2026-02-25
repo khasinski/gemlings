@@ -4,18 +4,28 @@ require "spec_helper"
 
 RSpec.describe Rubyagents::Model do
   describe ".for" do
-    it "resolves registered model providers" do
-      model = described_class.for("ollama/qwen2.5:3b")
-      expect(model).to be_a(Rubyagents::Models::Ollama)
-      expect(model.model_name).to eq("qwen2.5:3b")
+    it "resolves provider-prefixed model names via RubyLLM" do
+      model = described_class.for("anthropic/claude-sonnet-4-5")
+      expect(model).to be_a(Rubyagents::Models::RubyLLMAdapter)
+      expect(model.model_name).to eq("claude-sonnet-4-5")
+      expect(model.provider).to eq(:anthropic)
     end
 
-    it "raises on invalid format" do
-      expect { described_class.for("no-slash") }.to raise_error(Rubyagents::Error, /Invalid model ID/)
+    it "resolves bare model names via RubyLLM" do
+      model = described_class.for("gpt-4o")
+      expect(model).to be_a(Rubyagents::Models::RubyLLMAdapter)
+      expect(model.model_name).to eq("gpt-4o")
+      expect(model.provider).to be_nil
     end
 
-    it "raises on unknown provider" do
-      expect { described_class.for("unknown/model") }.to raise_error(Rubyagents::Error, /Unknown model provider/)
+    it "prefers registered custom adapters over RubyLLM" do
+      klass = Class.new(described_class)
+      described_class.register("custom", klass)
+      model = described_class.for("custom/my-model")
+      expect(model).to be_a(klass)
+      expect(model.model_name).to eq("my-model")
+    ensure
+      described_class.registry.delete("custom")
     end
   end
 

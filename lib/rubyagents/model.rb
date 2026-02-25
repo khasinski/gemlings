@@ -44,13 +44,17 @@ module Rubyagents
       end
 
       def for(model_id)
-        prefix, model_name = model_id.split("/", 2)
-        raise Error, "Invalid model ID format: #{model_id}. Use 'provider/model-name'" unless model_name
-
-        adapter_class = @registry[prefix]
-        raise Error, "Unknown model provider: #{prefix}. Available: #{@registry.keys.join(", ")}" unless adapter_class
-
-        adapter_class.new(model_name)
+        if model_id.include?("/")
+          prefix, model_name = model_id.split("/", 2)
+          adapter_class = @registry[prefix]
+          if adapter_class
+            adapter_class.new(model_name)
+          else
+            Models::RubyLLMAdapter.new(model_name, provider: prefix)
+          end
+        else
+          Models::RubyLLMAdapter.new(model_id)
+        end
       end
     end
 

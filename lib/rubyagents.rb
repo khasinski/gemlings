@@ -8,9 +8,7 @@ end
 
 require_relative "rubyagents/tool"
 require_relative "rubyagents/model"
-require_relative "rubyagents/models/openai"
-require_relative "rubyagents/models/anthropic"
-require_relative "rubyagents/models/ollama"
+require_relative "rubyagents/models/ruby_llm_adapter"
 require_relative "rubyagents/memory"
 require_relative "rubyagents/prompt"
 require_relative "rubyagents/sandbox"
