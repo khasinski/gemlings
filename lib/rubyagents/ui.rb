@@ -120,7 +120,7 @@ module Rubyagents
 
       def final_answer(text)
         puts Styles.result_header.render("\n━━━ Result ━━━")
-        puts word_wrap(text.to_s, 76)
+        puts text.to_s
       end
 
       def spinner(message)
@@ -154,15 +154,6 @@ module Rubyagents
         text[0...max] + Styles.dim.render("... (truncated)")
       end
 
-      def word_wrap(text, width)
-        text.split("\n").map do |line|
-          if line.length <= width
-            line
-          else
-            line.gsub(/(.{1,#{width}})(\s+|$)/, "\\1\n").rstrip
-          end
-        end.join("\n")
-      end
     end
   end
 end
