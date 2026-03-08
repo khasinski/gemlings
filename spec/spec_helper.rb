@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "rubyagent"
+require "gemlings"
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -20,17 +20,17 @@ RSpec.configure do |config|
 
   # Suppress UI output during tests
   config.before do
-    allow(Rubyagent::UI).to receive(:welcome)
-    allow(Rubyagent::UI).to receive(:thought)
-    allow(Rubyagent::UI).to receive(:code)
-    allow(Rubyagent::UI).to receive(:observation)
-    allow(Rubyagent::UI).to receive(:error)
-    allow(Rubyagent::UI).to receive(:plan)
-    allow(Rubyagent::UI).to receive(:step_metrics)
-    allow(Rubyagent::UI).to receive(:run_summary)
-    allow(Rubyagent::UI).to receive(:final_answer)
-    allow(Rubyagent::UI).to receive(:spinner).and_return(
-      instance_double(Rubyagent::UI::Spinner, start: nil, stop: nil)
+    allow(Gemlings::UI).to receive(:welcome)
+    allow(Gemlings::UI).to receive(:thought)
+    allow(Gemlings::UI).to receive(:code)
+    allow(Gemlings::UI).to receive(:observation)
+    allow(Gemlings::UI).to receive(:error)
+    allow(Gemlings::UI).to receive(:plan)
+    allow(Gemlings::UI).to receive(:step_metrics)
+    allow(Gemlings::UI).to receive(:run_summary)
+    allow(Gemlings::UI).to receive(:final_answer)
+    allow(Gemlings::UI).to receive(:spinner).and_return(
+      instance_double(Gemlings::UI::Spinner, start: nil, stop: nil)
     )
   end
 end

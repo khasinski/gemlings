@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative "../lib/rubyagent"
+require_relative "../lib/gemlings"
 
-class StockPrice < Rubyagent::Tool
+class StockPrice < Gemlings::Tool
   tool_name "stock_price"
   description "Gets the current stock price for a ticker symbol"
   input :ticker, type: :string, description: "Stock ticker symbol (e.g. AAPL)"
@@ -16,7 +16,7 @@ class StockPrice < Rubyagent::Tool
   end
 end
 
-agent = Rubyagent::CodeAgent.new(
+agent = Gemlings::CodeAgent.new(
   model: "anthropic/claude-sonnet-4-20250514",
   tools: [StockPrice]
 )

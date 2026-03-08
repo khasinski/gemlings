@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative "../lib/rubyagent"
+require_relative "../lib/gemlings"
 
-agent = Rubyagent::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
+agent = Gemlings::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
 agent.run("What is the 118th Fibonacci number?")
