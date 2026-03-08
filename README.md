@@ -1,7 +1,7 @@
 # Gemlings
 
 [![Gem Version](https://badge.fury.io/rb/gemlings.svg)](https://rubygems.org/gems/gemlings)
-[![CI](https://github.com/khasinski/gemlings/actions/workflows/ci.yml/badge.svg)](https://github.com/khasinski/gemlings/actions/workflows/ci.yml)
+[![CI](https://github.com/khasinski/rubyagents/actions/workflows/ci.yml/badge.svg)](https://github.com/khasinski/rubyagents/actions/workflows/ci.yml)
 
 *Small, autonomous agents running Ruby snippets.*
 

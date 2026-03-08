@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "A radically simple, code-first AI agent framework for Ruby"
   spec.description = "Agents that write and execute Ruby code. Inspired by smolagents. " \
                      "LLMs write executable code, not JSON blobs."
-  spec.homepage = "https://github.com/khasinski/gemlings"
+  spec.homepage = "https://github.com/khasinski/rubyagents"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
 
