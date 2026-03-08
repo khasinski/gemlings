@@ -36,4 +36,4 @@ Initial release.
 - **Step-by-step execution** -- `agent.step()` for debugging and custom UIs
 - **Planning** -- Optional periodic re-planning during long runs
 - **Managed agents** -- Nest agents as tools for multi-agent workflows
-- **CLI** -- `rubyagents` command with interactive mode, tool loading, and MCP support
+- **CLI** -- `rubyagent` command with interactive mode, tool loading, and MCP support

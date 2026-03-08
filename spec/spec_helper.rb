@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "rubyagents"
+require "rubyagent"
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -20,17 +20,17 @@ RSpec.configure do |config|
 
   # Suppress UI output during tests
   config.before do
-    allow(Rubyagents::UI).to receive(:welcome)
-    allow(Rubyagents::UI).to receive(:thought)
-    allow(Rubyagents::UI).to receive(:code)
-    allow(Rubyagents::UI).to receive(:observation)
-    allow(Rubyagents::UI).to receive(:error)
-    allow(Rubyagents::UI).to receive(:plan)
-    allow(Rubyagents::UI).to receive(:step_metrics)
-    allow(Rubyagents::UI).to receive(:run_summary)
-    allow(Rubyagents::UI).to receive(:final_answer)
-    allow(Rubyagents::UI).to receive(:spinner).and_return(
-      instance_double(Rubyagents::UI::Spinner, start: nil, stop: nil)
+    allow(Rubyagent::UI).to receive(:welcome)
+    allow(Rubyagent::UI).to receive(:thought)
+    allow(Rubyagent::UI).to receive(:code)
+    allow(Rubyagent::UI).to receive(:observation)
+    allow(Rubyagent::UI).to receive(:error)
+    allow(Rubyagent::UI).to receive(:plan)
+    allow(Rubyagent::UI).to receive(:step_metrics)
+    allow(Rubyagent::UI).to receive(:run_summary)
+    allow(Rubyagent::UI).to receive(:final_answer)
+    allow(Rubyagent::UI).to receive(:spinner).and_return(
+      instance_double(Rubyagent::UI::Spinner, start: nil, stop: nil)
     )
   end
 end

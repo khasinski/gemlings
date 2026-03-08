@@ -1,6 +1,6 @@
 # Roadmap
 
-Gaps identified by comparing rubyagents with [smolagents](https://github.com/huggingface/smolagents), prioritized for Ruby developers building agents.
+Gaps identified by comparing rubyagent with [smolagents](https://github.com/huggingface/smolagents), prioritized for Ruby developers building agents.
 
 ## Phase 5 -- Core DX (high impact, low effort)
 
@@ -48,7 +48,7 @@ For production use where agent code can't be trusted.
 
 ## Not planned
 
-These exist in smolagents but don't fit rubyagents' design goals:
+These exist in smolagents but don't fit rubyagent' design goals:
 
 - **Hub sharing** -- No equivalent to HuggingFace Hub in Ruby. Gems are the distribution mechanism.
 - **LangChain/Gradio interop** -- Python-specific ecosystems.

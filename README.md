@@ -1,24 +1,24 @@
-# Rubyagents
+# Rubyagent
 
-[![Gem Version](https://badge.fury.io/rb/rubyagents.svg)](https://rubygems.org/gems/rubyagents)
+[![Gem Version](https://badge.fury.io/rb/rubyagent.svg)](https://rubygems.org/gems/rubyagent)
 [![CI](https://github.com/khasinski/rubyagents/actions/workflows/ci.yml/badge.svg)](https://github.com/khasinski/rubyagents/actions/workflows/ci.yml)
 
 A radically simple, code-first AI agent framework for Ruby. Inspired by [smolagents](https://github.com/huggingface/smolagents).
 
 LLMs write and execute Ruby code -- not JSON blobs. This means tool calls are just method calls, variables persist between steps, and the full power of Ruby is available to the agent at every turn.
 
-![rubyagents demo](demo.gif)
+![rubyagent demo](demo.gif)
 
 ## Installation
 
 ```bash
-gem install rubyagents
+gem install rubyagent
 ```
 
 Or add to your Gemfile:
 
 ```ruby
-gem "rubyagents"
+gem "rubyagent"
 ```
 
 Requires Ruby 3.2+. JRuby 9.4+ is also supported — the sandbox automatically switches from fork-based to thread-based execution, and platform-specific gems (lipgloss) are skipped gracefully.
@@ -26,9 +26,9 @@ Requires Ruby 3.2+. JRuby 9.4+ is also supported — the sandbox automatically s
 ## Quick start
 
 ```ruby
-require "rubyagents"
+require "rubyagent"
 
-agent = Rubyagents::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
+agent = Rubyagent::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
 agent.run("What is the 118th Fibonacci number?")
 ```
 
@@ -40,13 +40,13 @@ Pass a model string as `provider/model_name`:
 
 ```ruby
 # Anthropic
-Rubyagents::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
+Rubyagent::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
 
 # OpenAI
-Rubyagents::CodeAgent.new(model: "openai/gpt-4o")
+Rubyagent::CodeAgent.new(model: "openai/gpt-4o")
 
 # Ollama (local)
-Rubyagents::CodeAgent.new(model: "ollama/qwen2.5:3b")
+Rubyagent::CodeAgent.new(model: "ollama/qwen2.5:3b")
 ```
 
 Set API keys via environment variables: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`.
@@ -56,13 +56,13 @@ Set API keys via environment variables: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`.
 **CodeAgent** -- the LLM writes Ruby code that gets executed in a sandboxed environment. Tools are available as methods. Variables persist between steps. On MRI, code runs in a forked child process for full isolation; on JRuby, a thread-based executor is used automatically since fork is unavailable — no configuration needed.
 
 ```ruby
-agent = Rubyagents::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
+agent = Rubyagent::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
 ```
 
 **ToolCallingAgent** -- the LLM uses structured tool calls (OpenAI function calling style). Better for models with strong tool_call support.
 
 ```ruby
-agent = Rubyagents::ToolCallingAgent.new(model: "openai/gpt-4o")
+agent = Rubyagent::ToolCallingAgent.new(model: "openai/gpt-4o")
 ```
 
 ## Custom tools
@@ -70,7 +70,7 @@ agent = Rubyagents::ToolCallingAgent.new(model: "openai/gpt-4o")
 Define tools as classes:
 
 ```ruby
-class StockPrice < Rubyagents::Tool
+class StockPrice < Rubyagent::Tool
   tool_name "stock_price"
   description "Gets the current stock price for a ticker symbol"
   input :ticker, type: :string, description: "Stock ticker symbol (e.g. AAPL)"
@@ -82,7 +82,7 @@ class StockPrice < Rubyagents::Tool
   end
 end
 
-agent = Rubyagents::CodeAgent.new(
+agent = Rubyagent::CodeAgent.new(
   model: "anthropic/claude-sonnet-4-20250514",
   tools: [StockPrice]
 )
@@ -91,11 +91,11 @@ agent = Rubyagents::CodeAgent.new(
 Or define them inline:
 
 ```ruby
-weather = Rubyagents.tool(:weather, "Gets weather for a city", city: "City name") do |city:|
+weather = Rubyagent.tool(:weather, "Gets weather for a city", city: "City name") do |city:|
   "72F and sunny in #{city}"
 end
 
-agent = Rubyagents::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514", tools: [weather])
+agent = Rubyagent::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514", tools: [weather])
 ```
 
 ## MCP tools
@@ -103,9 +103,9 @@ agent = Rubyagents::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514", t
 Load tools from any [MCP](https://modelcontextprotocol.io/) server:
 
 ```ruby
-tools = Rubyagents.tools_from_mcp(command: ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/tmp"])
+tools = Rubyagent.tools_from_mcp(command: ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/tmp"])
 
-agent = Rubyagents::CodeAgent.new(
+agent = Rubyagent::CodeAgent.new(
   model: "anthropic/claude-sonnet-4-20250514",
   tools: tools
 )
@@ -125,7 +125,7 @@ schema = {
   }
 }
 
-agent = Rubyagents::CodeAgent.new(
+agent = Rubyagent::CodeAgent.new(
   model: "anthropic/claude-sonnet-4-20250514",
   output_type: schema
 )
@@ -138,7 +138,7 @@ If the output doesn't match, the agent retries automatically.
 Add validation procs that can reject answers and force retries:
 
 ```ruby
-agent = Rubyagents::CodeAgent.new(
+agent = Rubyagent::CodeAgent.new(
   model: "anthropic/claude-sonnet-4-20250514",
   final_answer_checks: [
     ->(answer, memory) { answer.length > 10 },
@@ -152,7 +152,7 @@ agent = Rubyagents::CodeAgent.new(
 Inject additional instructions without overriding the full system prompt:
 
 ```ruby
-agent = Rubyagents::CodeAgent.new(
+agent = Rubyagent::CodeAgent.new(
   model: "anthropic/claude-sonnet-4-20250514",
   instructions: "Always respond in French. Use metric units."
 )
@@ -161,11 +161,11 @@ agent = Rubyagents::CodeAgent.new(
 Or fully replace prompts:
 
 ```ruby
-templates = Rubyagents::PromptTemplates.new(
+templates = Rubyagent::PromptTemplates.new(
   system_prompt: "You are a data analyst. Tools: {{tool_descriptions}}"
 )
 
-agent = Rubyagents::CodeAgent.new(
+agent = Rubyagent::CodeAgent.new(
   model: "anthropic/claude-sonnet-4-20250514",
   prompt_templates: templates
 )
@@ -176,7 +176,7 @@ agent = Rubyagents::CodeAgent.new(
 Run one step at a time for debugging or custom UIs:
 
 ```ruby
-agent = Rubyagents::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
+agent = Rubyagent::CodeAgent.new(model: "anthropic/claude-sonnet-4-20250514")
 
 agent.step("What is 2+2?")
 agent.step until agent.done?
@@ -189,14 +189,14 @@ puts agent.final_answer_value
 Nest agents as tools:
 
 ```ruby
-researcher = Rubyagents::ToolCallingAgent.new(
+researcher = Rubyagent::ToolCallingAgent.new(
   model: "openai/gpt-4o",
   name: "researcher",
   description: "Researches topics on the web",
-  tools: [Rubyagents::WebSearch]
+  tools: [Rubyagent::WebSearch]
 )
 
-manager = Rubyagents::CodeAgent.new(
+manager = Rubyagent::CodeAgent.new(
   model: "anthropic/claude-sonnet-4-20250514",
   agents: [researcher]
 )
@@ -209,7 +209,7 @@ manager.run("Find out when Ruby 3.4 was released and summarize the key features"
 Enable periodic re-planning during long runs:
 
 ```ruby
-agent = Rubyagents::CodeAgent.new(
+agent = Rubyagent::CodeAgent.new(
   model: "anthropic/claude-sonnet-4-20250514",
   planning_interval: 3,  # Re-plan every 3 steps
   max_steps: 15
@@ -220,19 +220,19 @@ agent = Rubyagents::CodeAgent.new(
 
 ```bash
 # Simple query
-rubyagents "What is the 10th prime number?"
+rubyagent "What is the 10th prime number?"
 
 # With options
-rubyagents -m anthropic/claude-sonnet-4-20250514 -t web_search "Who won the latest Super Bowl?"
+rubyagent -m anthropic/claude-sonnet-4-20250514 -t web_search "Who won the latest Super Bowl?"
 
 # Tool-calling agent
-rubyagents -a tool_calling -m openai/gpt-4o "What is 6 * 7?"
+rubyagent -a tool_calling -m openai/gpt-4o "What is 6 * 7?"
 
 # With MCP tools
-rubyagents --mcp "npx -y @modelcontextprotocol/server-filesystem /tmp" "List files in /tmp"
+rubyagent --mcp "npx -y @modelcontextprotocol/server-filesystem /tmp" "List files in /tmp"
 
 # Interactive mode
-rubyagents -i
+rubyagent -i
 ```
 
 ## Configuration
