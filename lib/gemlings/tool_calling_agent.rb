@@ -15,12 +15,19 @@ module Gemlings
       prompt
     end
 
-    def generate_response(messages, &on_stream)
+    def generate_response(messages, stream: false, &on_stream)
       tool_schemas = tools.map { |t| t.class.to_schema }
-      spin = on_stream ? nil : UI.spinner("Thinking...")
-      spin&.start
-      response = @model.generate(messages, tools: tool_schemas, &on_stream)
-      spin&.stop
+      if on_stream
+        response = @model.generate(messages, tools: tool_schemas, &on_stream)
+      elsif stream
+        response = @model.generate(messages, tools: tool_schemas) { |token| UI.stream_token(token) }
+        UI.stream_end
+      else
+        spin = UI.spinner("Thinking...")
+        spin.start
+        response = @model.generate(messages, tools: tool_schemas)
+        spin.stop
+      end
       response
     end
 

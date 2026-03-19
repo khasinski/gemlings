@@ -23,6 +23,7 @@ module Gemlings
         tools: [],
         mcp: [],
         interactive: false,
+        stream: false,
         max_steps: 10,
         planning_interval: nil,
         agent_type: "code"
@@ -65,6 +66,10 @@ module Gemlings
 
         opts.on("-i", "--interactive", "Interactive mode") do
           @options[:interactive] = true
+        end
+
+        opts.on("-S", "--stream", "Stream LLM tokens to the terminal") do
+          @options[:stream] = true
         end
 
         opts.on("--mcp COMMAND", "MCP server command (repeatable)") do |cmd|
@@ -119,7 +124,7 @@ module Gemlings
     def single_query(query)
       UI.welcome
       agent = build_agent
-      agent.run(query)
+      agent.run(query, stream: @options[:stream])
     end
 
     def interactive_mode
@@ -135,7 +140,7 @@ module Gemlings
         query = $stdin.gets&.strip
         break if query.nil? || query.empty?
 
-        agent.run(query, reset: first)
+        agent.run(query, reset: first, stream: @options[:stream])
         first = false
         puts
       end

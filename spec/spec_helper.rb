@@ -32,5 +32,7 @@ RSpec.configure do |config|
     allow(Gemlings::UI).to receive(:spinner).and_return(
       instance_double(Gemlings::UI::Spinner, start: nil, stop: nil)
     )
+    allow(Gemlings::UI).to receive(:stream_token)
+    allow(Gemlings::UI).to receive(:stream_end)
   end
 end

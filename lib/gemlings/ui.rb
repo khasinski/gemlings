@@ -208,6 +208,14 @@ module Gemlings
         Spinner.new(message)
       end
 
+      def stream_token(text)
+        $stderr.print text
+      end
+
+      def stream_end
+        $stderr.print "\n"
+      end
+
       def welcome
         if LIPGLOSS_AVAILABLE
           title = Lipgloss::Style.new

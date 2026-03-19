@@ -214,6 +214,7 @@ gemlings -m openai/gpt-4o -t web_search "Who won the latest Super Bowl?"
 gemlings -a tool_calling -m openai/gpt-4o "What is 6 * 7?"
 gemlings --mcp "npx -y @modelcontextprotocol/server-filesystem /tmp" "List files in /tmp"
 gemlings -i  # interactive mode
+gemlings -S "What is 2+2?"  # stream tokens to terminal
 ```
 
 ## Configuration

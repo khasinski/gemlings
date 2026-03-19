@@ -27,7 +27,7 @@ module Gemlings
       @tool_map = @tools.each_with_object({}) { |t, h| h[t.class.tool_name] = t }
     end
 
-    def run(task, reset: true, return_full_result: false, &on_stream)
+    def run(task, reset: true, return_full_result: false, stream: false, &on_stream)
       @interrupt_switch = false
 
       if reset || @memory.nil?
@@ -46,7 +46,7 @@ module Gemlings
         maybe_plan(step_number)
 
         # Call LLM with timing
-        llm_duration, response = timed { generate_response(memory.to_messages, &on_stream) }
+        llm_duration, response = timed { generate_response(memory.to_messages, stream: stream, &on_stream) }
 
         # Parse response
         thought, action = parse_response(response)
@@ -159,11 +159,18 @@ module Gemlings
       raise NotImplementedError
     end
 
-    def generate_response(messages, &on_stream)
-      spin = on_stream ? nil : UI.spinner("Thinking...")
-      spin&.start
-      response = @model.generate(messages, &on_stream)
-      spin&.stop
+    def generate_response(messages, stream: false, &on_stream)
+      if on_stream
+        response = @model.generate(messages, &on_stream)
+      elsif stream
+        response = @model.generate(messages) { |token| UI.stream_token(token) }
+        UI.stream_end
+      else
+        spin = UI.spinner("Thinking...")
+        spin.start
+        response = @model.generate(messages)
+        spin.stop
+      end
       response
     end
 
